@@ -6,7 +6,7 @@
 </head>
 <body>
     <h1>Add a New Property</h1>
-    <form action="/add_property" method="post">
+    <form action="/add_property" method="post" enctype="multipart/form-data">
         <label for="title">Title:</label>
         <input type="text" id="title" name="title" required><br><br>
         
@@ -20,10 +20,18 @@
         <input type="text" id="location" name="location" required><br><br>
         
         <label for="type">Type:</label>
-        <input type="text" id="type" name="type" required><br><br>
+        <select id="type" name="type" required>
+            <option value="">SELECT</option>
+            <option value="TANAH">TANAH</option>
+            <option value="RUMAH">RUMAH</option>
+            <option value="RUKO">RUKO</option>
+        </select><br><br>
         
         <label for="date_added">Date Added:</label>
         <input type="datetime-local" id="date_added" name="date_added" required><br><br>
+        
+        <label for="images">Images:</label>
+        <input type="file" id="images" name="images" multiple><br><br>
         
         <button type="submit">Add Property</button>
     </form>

@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Properties</title>
+  <style>
+    .card {
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      margin: 16px;
+      overflow: hidden;
+      width: 300px;
+      display: inline-block;
+      vertical-align: top;
+    }
+    .card img {
+      width: 100%;
+      height: auto;
+    }
+    .card-body {
+      padding: 16px;
+    }
+    .card-title {
+      font-size: 1.25em;
+      margin-bottom: 8px;
+    }
+    .card-text {
+      margin-bottom: 8px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Properties</h1>
+  <div>
+    {% for property in properties %}
+      <div class="card">
+        {% if property.images %}
+          <img src="data:image/jpeg;base64,{{ property.images[0].image_data }}" alt="Property Image">
+        {% else %}
+          <img src="https://via.placeholder.com/300" alt="No Image Available">
+        {% endif %}
+        <div class="card-body">
+          <h2 class="card-title">{{ property.title }}</h2>
+          <p class="card-text">{{ property.description }}</p>
+          <p class="card-text">Price: ${{ property.price }}</p>
+          <p class="card-text">Location: {{ property.location }}</p>
+          <p class="card-text">Type: {{ property.type }}</p>
+          <p class="card-text">Date Added: {{ property.date_added }}</p>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</body>
+</html>

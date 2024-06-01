@@ -1,23 +1,16 @@
 from flask import Flask, request, render_template, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 import os
+import base64
 from werkzeug.utils import secure_filename
-# from flask_login import UserMixin,LoginManager,login_required,login_user,logout_user
+from datetime import datetime
 
 app = Flask(__name__)
 
-app.config["SQLALCHEMY_DATABASE_URI"]= "postgresql://neonsql_owner:AcSIWq5E0Rej@ep-royal-king-a1z6svb5.ap-southeast-1.aws.neon.tech/neonsql?sslmode=require"
+app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://neonsql_owner:AcSIWq5E0Rej@ep-royal-king-a1z6svb5.ap-southeast-1.aws.neon.tech/neonsql?sslmode=require"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-app.config['UPLOAD_FOLDER'] = 'uploads'
-app.config['MAX_CONTENT_PATH'] = 16 * 1024 * 1024
-
 
 db = SQLAlchemy(app)
-
-# Create a simple model
-class Book(db.Model):
-    book_id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String)
 
 class Property(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -29,29 +22,18 @@ class Property(db.Model):
     images = db.relationship('PropertyImage', backref='property', lazy=True)
     date_added = db.Column(db.DateTime, default=db.func.current_timestamp())
 
-# Model PropertyImage (sesuaikan dengan kebutuhan Anda)
 class PropertyImage(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     property_id = db.Column(db.Integer, db.ForeignKey('property.id'), nullable=False)
-    image_url = db.Column(db.String(200), nullable=False)
+    image_data = db.Column(db.Text, nullable=False)
 
-# Commit your model (table) to the database
 with app.app_context():
     db.create_all()
 
 @app.route('/')
 def home():
-    return "Home Page!"
-
-@app.route('/add_book', methods=['GET', 'POST'])
-def add_book():
-    if request.method == 'POST':
-        title = request.form['title']
-        new_book = Book(title=title)
-        db.session.add(new_book)
-        db.session.commit()
-        return redirect(url_for('home'))
-    return render_template('add_book.html')
+    properties = Property.query.all()
+    return render_template('home.html', properties=properties)
 
 @app.route('/add_property', methods=['GET', 'POST'])
 def add_property():
@@ -61,8 +43,8 @@ def add_property():
         price = request.form['price']
         location = request.form['location']
         type = request.form['type']
-        date_added = request.form['date_added']
-        
+        date_added = datetime.strptime(request.form['date_added'], '%Y-%m-%dT%H:%M')
+
         new_property = Property(
             title=title,
             description=description,
@@ -80,10 +62,10 @@ def add_property():
         for file in files:
             if file:
                 filename = secure_filename(file.filename)
-                filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-                file.save(filepath)
+                file_data = file.read()
+                encoded_string = base64.b64encode(file_data).decode('utf-8')
 
-                new_image = PropertyImage(property_id=new_property.id, image_url=filepath)
+                new_image = PropertyImage(property_id=new_property.id, image_data=encoded_string)
                 db.session.add(new_image)
                 db.session.commit()
         
@@ -91,6 +73,4 @@ def add_property():
     return render_template('add_property.html')
 
 if __name__ == '__main__':
-    if not os.path.exists(app.config['UPLOAD_FOLDER']):
-        os.makedirs(app.config['UPLOAD_FOLDER'])
     app.run(debug=True)
