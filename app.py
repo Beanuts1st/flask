@@ -6,6 +6,10 @@ app = Flask(__name__)
 
 app.config["SQLALCHEMY_DATABASE_URI"]= "postgresql://neonsql_owner:AcSIWq5E0Rej@ep-royal-king-a1z6svb5.ap-southeast-1.aws.neon.tech/neonsql?sslmode=require"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+app.config['UPLOAD_FOLDER'] = 'uploads'
+app.config['MAX_CONTENT_PATH'] = 16 * 1024 * 1024
+
+
 db = SQLAlchemy(app)
 
 # Create a simple model
@@ -68,9 +72,23 @@ def add_property():
         
         db.session.add(new_property)
         db.session.commit()
+
+        # Handling image uploads
+        files = request.files.getlist('images')
+        for file in files:
+            if file:
+                filename = secure_filename(file.filename)
+                filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                file.save(filepath)
+
+                new_image = PropertyImage(property_id=new_property.id, image_url=filepath)
+                db.session.add(new_image)
+                db.session.commit()
         
         return redirect(url_for('home'))
     return render_template('add_property.html')
 
 if __name__ == '__main__':
+    if not os.path.exists(app.config['UPLOAD_FOLDER']):
+        os.makedirs(app.config['UPLOAD_FOLDER'])
     app.run(debug=True)
