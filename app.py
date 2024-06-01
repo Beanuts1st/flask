@@ -1,6 +1,8 @@
 from flask import Flask, request, render_template, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import UserMixin,LoginManager,login_required,login_user,logout_user
+import os
+from werkzeug.utils import secure_filename
+# from flask_login import UserMixin,LoginManager,login_required,login_user,logout_user
 
 app = Flask(__name__)
 
