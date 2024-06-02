@@ -1,0 +1,41 @@
+<!-- add_property.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Property</title>
+</head>
+<body>
+    <h1>Add Property</h1>
+    <form action="{{ url_for('add_property') }}" method="POST" enctype="multipart/form-data">
+        <label for="title">Title:</label>
+        <input type="text" name="title" required><br><br>
+
+        <label for="description">Description:</label>
+        <textarea name="description" required></textarea><br><br>
+
+        <label for="price">Price:</label>
+        <input type="number" name="price" required><br><br>
+
+        <label for="location">Location:</label>
+        <input type="text" name="location" required><br><br>
+
+        <label for="type">Type:</label>
+        <select id="type" name="type" required>
+            <option value="">SELECT</option>
+            <option value="TANAH">TANAH</option>
+            <option value="RUMAH">RUMAH</option>
+            <option value="RUKO">RUKO</option>
+        </select><br><br>
+
+        <label for="date_added">Date Added:</label>
+        <input type="datetime-local" name="date_added" required><br><br>
+
+        <label for="images">Images:</label>
+        <input type="file" name="images" multiple required><br><br>
+
+        <input type="submit" value="Add Property">
+    </form>
+</body>
+</html>

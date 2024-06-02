@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <title>Flask Real Estate</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='aos.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='tiny-slider.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='icomoon/style.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='flaticon/font/flaticon.css') }}" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600;700&display=swap" />
+</head>
+
+<body>
+  <!-- Navigation Bar -->
+  {% include "/components/navbar.html" %}
+  <!-- Section Hero -->
+  {% include hero_template %}
+  <!-- Content -->
+  {% block content %}{% endblock %}
+  <!-- Footer -->
+  {% include "/components/footer.html" %} 
+
+  <div id="overlayer"></div>
+  <div class="loader">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/tiny-slider.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/aos.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/navbar.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/counter.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
+</body>
+
+</html>

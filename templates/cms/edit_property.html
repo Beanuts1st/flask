@@ -1,0 +1,116 @@
+{% extends "admin.html" %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="card">
+    <div class="card-header">
+      <h2>Edit Property</h2>
+    </div>
+    <div class="card-body">
+      <form method="POST" enctype="multipart/form-data" onsubmit="return validateForm()">
+        {{ form.hidden_tag() }}
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              {{ form.title.label }}<br />
+              {{ form.title(class="form-control", size=32) }}<br />
+              {% for error in form.title.errors %}
+              <p class="text-danger">{{ error }}</p>
+              {% endfor %}
+            </div>
+            <div>
+              {{ form.type.label }}<br>
+              {{ form.type }}<br>
+              {% for error in form.type.errors %}
+              <p>{{ error }}</p>
+              {% endfor %}
+            </div>
+            <div class="form-group">
+              {{ form.description.label }}<br />
+              {{ form.description(class="form-control", rows=5) }}<br />
+              {% for error in form.description.errors %}
+              <p class="text-danger">{{ error }}</p>
+              {% endfor %}
+            </div>
+            <div class="form-group">
+              {{ form.price.label }}<br />
+              {{ form.price(class="form-control", id="price") }}<br />
+              {% for error in form.price.errors %}
+              <p class="text-danger">{{ error }}</p>
+              {% endfor %}
+            </div>
+            <div class="form-group">
+              {{ form.location.label }}<br />
+              {{ form.location(class="form-control", size=32) }}<br />
+              {% for error in form.location.errors %}
+              <p class="text-danger">{{ error }}</p>
+              {% endfor %}
+            </div>
+            <div class="form-group text-center">
+              {{ form.submit(class="btn btn-primary") }}<br />
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="image-preview-container card"
+              style="position: relative; width: 100%; padding-top: 90%; height: 0; margin-top: 31px; background-color: rgba(0, 0, 0, .03);">
+              <img id="preview" src="#" alt="Image Preview"
+                style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; display: none;">
+            </div>
+            <div class="form-group mt-5">
+              {{ form.images(class="form-control-file", id="imageInput") }}<br />
+              {% for error in form.images.errors %}
+              <p class="text-danger">{{ error }}</p>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  function validateForm() {
+    var price = document.getElementById("price").value;
+    if (isNaN(price) || price <= 0) {
+      alert("Price must be a positive number");
+      return false;
+    }
+    return true;
+  }
+  document.querySelector('input[type="file"]').addEventListener('change', function (e) {
+    var file = this.files[0];
+    if (file) {
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        var preview = document.getElementById('preview');
+        var filename = document.getElementById('image-filename');
+        preview.src = e.target.result;
+        preview.style.display = 'block';
+        filename.textContent = file.name;
+      }
+      reader.readAsDataURL(file);
+    } else {
+      var preview = document.getElementById('preview');
+      var filename = document.getElementById('image-filename');
+      preview.src = '#';
+      preview.style.display = 'none';
+      filename.textContent = '';
+    }
+  });
+  document.getElementById("imageInput").addEventListener("change", function (event) {
+    var imagePreview = document.getElementById("imagePreview");
+    var file = event.target.files[0];
+    if (file) {
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        imagePreview.src = e.target.result;
+        imagePreview.style.display = "block";
+      };
+      reader.readAsDataURL(file);
+    } else {
+      imagePreview.style.display = "none";
+    }
+  });
+</script>
+{% endblock %}

@@ -1,0 +1,95 @@
+{% extends "./base.html" %}
+{% block content %}
+<div class="section">
+  <div class="container">
+    <div class="row text-left mb-5">
+      <div class="col-12">
+        <h2 class="font-weight-bold heading text-primary mb-4">Services</h2>
+      </div>
+      <div class="col-lg-6">
+        <p class="text-black-50">
+          Our main service involve Service is Real Estate Property Agent and we also provide other services as follows:
+        </p>
+        <p class="text-black-50">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni
+          saepe, explicabo nihil. Est, autem error cumque ipsum repellendus
+          veniam sed blanditiis unde ullam maxime veritatis perferendis
+          cupiditate, at non esse!
+        </p>
+      </div>
+      <div class="col-lg-6">
+        <p class="text-black-50">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni
+          saepe, explicabo nihil. Est, autem error cumque ipsum repellendus
+          veniam sed blanditiis unde ullam maxime veritatis perferendis
+          cupiditate, at non esse!
+        </p>
+        <p class="text-black-50">
+          Enim, nisi labore exercitationem facere cupiditate nobis quod
+          autem veritatis quis minima expedita. Cumque odio illo iusto
+          reiciendis, labore impedit omnis, nihil aut atque, facilis
+          necessitatibus asperiores porro qui nam.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+{% for category in categories %}
+{% if loop.index % 2 != 0 %}
+<div class="section pt-0 mb-5">
+  <div class="container">
+    <div class="row justify-content-between mb-5">
+      <div class="col-lg-7 mb-5 mb-lg-0 order-lg-2">
+        <div class="img-about dots">
+          <img src="/static/images/hero_bg_1.jpg" alt="Image" class="img-fluid" />
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <h3 class="font-weight-bold heading text-primary mb-4">{{category}}</h3>
+        <p class="text-black-50">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni
+          saepe, explicabo nihil. Est, autem error cumque ipsum repellendus
+          veniam sed blanditiis unde ullam maxime veritatis perferendis
+          cupiditate, at non esse!
+        </p>
+        <p class="text-black-50">
+          Enim, nisi labore exercitationem facere cupiditate nobis quod
+          autem veritatis quis minima expedita. Cumque odio illo iusto
+          reiciendis, labore impedit omnis, nihil aut atque, facilis
+          necessitatibus asperiores porro qui nam.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+{% else %}
+<div class="section pt-0 mb-5">
+  <div class="container">
+    <div class="row justify-content-between mb-5">
+      <div class="col-lg-7 mb-5 mb-lg-0">
+        <div class="img-about dots">
+          <img src="/static/images/hero_bg_3.jpeg" alt="Image" class="img-fluid" />
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <h3 class="font-weight-bold heading text-primary mb-4">{{category}}</h3>
+        <p class="text-black-50">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni
+          saepe, explicabo nihil. Est, autem error cumque ipsum repellendus
+          veniam sed blanditiis unde ullam maxime veritatis perferendis
+          cupiditate, at non esse!
+        </p>
+        <p class="text-black-50">
+          Enim, nisi labore exercitationem facere cupiditate nobis quod
+          autem veritatis quis minima expedita. Cumque odio illo iusto
+          reiciendis, labore impedit omnis, nihil aut atque, facilis
+          necessitatibus asperiores porro qui nam.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+{% endfor %}
+
+{% endblock %}
