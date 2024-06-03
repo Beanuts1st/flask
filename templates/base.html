@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='icomoon/style.css') }}" />
   <link rel="stylesheet" href="{{ url_for('static', filename='flaticon/font/flaticon.css') }}" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600;700&display=swap" />
+  <link rel="icon" type="image/svg+xml" sizes="32" href="/static/flaticon/logo.svg">
 </head>
 
 <body>
@@ -36,6 +37,15 @@
   <script src="{{ url_for('static', filename='js/navbar.js') }}"></script>
   <script src="{{ url_for('static', filename='js/counter.js') }}"></script>
   <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <script>
+      function openWhatsApp() {
+          var phoneNumber = '1234567890'; // Ganti dengan nomor WhatsApp Anda
+          var message = 'Hello, I have a question about your services.'; // Pesan yang ingin Anda kirimkan
+          var url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+          window.open(url, '_blank');
+      }
+  </script>
 </body>
 
 </html>

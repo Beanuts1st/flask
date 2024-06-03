@@ -18,9 +18,9 @@
                   <label for="title">Title</label>
                   <input type="text" name="title" class="form-control" size="32" required>
                 </div>
-                <div>
+                <div class="form-group">
                     <label for="type">Type:</label>
-                    <select id="type" name="type" required>
+                    <select id="type" name="type" class="form-control" required>
                         <option value="">SELECT</option>
                         <option value="TANAH">TANAH</option>
                         <option value="RUMAH">RUMAH</option>
@@ -39,19 +39,19 @@
                   <label for="location">Location</label>
                   <input type="text" name="location" class="form-control" size="32" required>
                 </div>
-                <div class="form-group text-center">
-                  <button type="submit" class="btn btn-primary">Submit</button>
-                </div>
               </div>
               <div class="col-md-6">
                 <div class="image-preview-container card"
-                  style="position: relative; width: 100%; padding-top: 90%; height: 0; margin-top: 31px; background-color: rgba(0, 0, 0, .03);">
-                  <img id="preview" src="#" alt="Image Preview"
-                    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; display: none;">
-                </div>
-                <div class="form-group mt-5">
-                  <input type="file" name="images" class="form-control-file" id="imageInput" multiple><br />
-                </div>
+                style="position: relative; width: 100%; padding-top: 90%; height: 0; margin-top: 31px; background-color: rgba(0, 0, 0, .03);">
+                <img id="preview" src="#" alt="Image Preview"
+                style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; display: none;">
+              </div>
+              <div class="form-group mt-5">
+                <input type="file" name="images" class="form-control-file" id="imageInput" multiple><br />
+              </div>
+              <div class="form-group text-center">
+                <button type="submit" class="btn btn-primary">Submit</button>
+              </div>
               </div>
             </div>
           </form>

@@ -3,9 +3,14 @@
 {% block content %}
 
 <div class="section">
-    <div class="container">
+    <div class="container pt-5">
+        <div class="col-lg-12 mb-5">
+            <h2 class="font-weight-bold text-primary heading">
+                Detail Properties
+            </h2>
+        </div>
         <div class="row justify-content-between">
-            <div class="col-lg-7">
+            <div class="col-lg-6">
                 <div class="img-property-slide-wrap">
                     <div class="img-property-slide">
                         {% if property.images %}
@@ -18,41 +23,17 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-4">
+            <div class="col-lg-5">
                 <h2 class="heading text-primary">{{ property.title }}</h2>
-                <p class="meta">Location: {{ property.location }}</p>
-                <p class="meta">Price: ${{ property.price }}</p>
-                <p class="meta">Date Added: {{ property.date_added }}</p>
-                <p class="text-black-50">{{ property.description }}</p>
-                <div class="d-block agent-box p-5">
-                    <div class="img mb-4">
-                        <img src="images/person_2-min.jpg" alt="Image" class="img-fluid" />
-                    </div>
-                    <div class="text">
-                        <h3 class="mb-0">Alicia Huston</h3>
-                        <div class="meta mb-3">Real Estate</div>
-                        <p>
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                            Ratione laborum quo quos omnis sed magnam id ducimus saepe
-                        </p>
-                        <ul class="list-unstyled social dark-hover d-flex">
-                            <li class="me-1">
-                                <a href="#"><span class="icon-instagram"></span></a>
-                            </li>
-                            <li class="me-1">
-                                <a href="#"><span class="icon-twitter"></span></a>
-                            </li>
-                            <li class="me-1">
-                                <a href="#"><span class="icon-facebook"></span></a>
-                            </li>
-                            <li class="me-1">
-                                <a href="#"><span class="icon-linkedin"></span></a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
+                <p class="meta text-xl">Location: {{ property.location }}</p>
+                <p class="meta text-xl font-weight-bold">Price: {{ property.price|rupiah }}</p>
+                <p class="meta text-xl">Date Added: {{ property.date_added }}</p>
+                <p class="text-text-xl">{{ property.description }}</p>
             </div>
         </div>
+    </div>
+    <div class="whatsapp-button" onclick="openWhatsApp()">
+        <img src="/static/flaticon/whatsapp.png" alt="WhatsApp Icon">
     </div>
 </div>
 {% endblock %}

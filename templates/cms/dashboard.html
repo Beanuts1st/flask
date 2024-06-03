@@ -19,6 +19,7 @@
                             <th>Title</th>
                             <th>Type</th>
                             <th>Location</th>
+                            <th>Description</th>
                             <th>Price</th>
                             <th>Image</th>
                             <th>Action</th>
@@ -31,31 +32,15 @@
                             <td>{{ property.title }}</td>
                             <td>{{ property.type }}</td>
                             <td>{{ property.location }}</td>
-                            <td>${{ property.price }}</td>
+                            <td>{{ property.description }}</td>
+                            <td>{{ property.price|rupiah }}</td>
                             <td>
-                                <div id="carouselExampleControls{{ property.id }}" class="carousel slide"
-                                    data-ride="carousel">
-                                    <div class="carousel-inner">
-                                        {% for image in property.images %}
-                                        <div class="carousel-item {% if loop.first %}active{% endif %}">
-                                            <img src="data:image/jpeg;base64,{{ image.image_data }}"
-                                                class="d-block w-100" alt="Property Image">
-                                        </div>
-                                        {% endfor %}
-                                    </div>
-                                    <a class="carousel-control-prev"
-                                        href="#carouselExampleControls{{ property.id }}" role="button"
-                                        data-slide="prev">
-                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                        <span class="sr-only">Previous</span>
-                                    </a>
-                                    <a class="carousel-control-next"
-                                        href="#carouselExampleControls{{ property.id }}" role="button"
-                                        data-slide="next">
-                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                        <span class="sr-only">Next</span>
-                                    </a>
+                                {% for image in property.images %}
+                                <div class="carousel-item {% if loop.first %}active{% endif %}">
+                                    <img src="data:image/jpeg;base64,{{ image.image_data }}" class="d-block w-100"
+                                        alt="Property Image">
                                 </div>
+                                {% endfor %}
                             </td>
                             <td>
                                 <a href="{{ url_for('edit_property', property_id=property.id) }}"

@@ -57,6 +57,19 @@ class SuperUser(UserMixin, db.Model):
 
     def get_id(self):
         return str(self.id)
+    
+def format_rupiah(price):
+    try:
+        # Konversi price menjadi float dan kemudian format menjadi rupiah
+        formatted_price = "Rp {:,}".format(float(price))
+        # Ganti koma dengan titik (untuk pemisah ribuan) dan titik dengan koma (untuk pemisah desimal)
+        formatted_price = formatted_price.replace(',', 'X').replace('.', ',').replace('X', '.')
+        return formatted_price
+    except ValueError:
+        return "Invalid input"
+    
+# Daftarkan fungsi sebagai filter Jinja2
+app.jinja_env.filters['rupiah'] = format_rupiah
 
 with app.app_context():
     db.create_all()
@@ -99,6 +112,11 @@ def logout():
     logout_user()
     return redirect(url_for('home'))
 
+
+@app.route('/admin')
+@login_required
+def admin():
+   return redirect(url_for('dashboard'))
 
 @app.route('/')
 def home():
@@ -184,6 +202,7 @@ def add_property():
         location = request.form['location']
         type = request.form['type']
         date_added = datetime.utcnow()
+        
 
         new_property = Property(
             title=title,
@@ -227,45 +246,39 @@ def edit_property(property_id):
     property = Property.query.get_or_404(property_id)
 
     if request.method == 'POST':
-        # Perbarui properti
+        # Update property
         property.title = request.form['title']
         property.description = request.form['description']
         property.price = request.form['price']
         property.location = request.form['location']
         property.type = request.form['type']
-        property.date_added = datetime.strptime(request.form['date_added'], '%Y-%m-%dT%H:%M')
+        property.date_added = datetime.utcnow()
 
-        # Hapus gambar lama
+        # Delete old images
         PropertyImage.query.filter_by(property_id=property.id).delete()
 
-        # Simpan perubahan properti
+        # Commit changes to property
         db.session.commit()
 
-        # Tambahkan gambar-gambar baru
-        files = request.files.getlist('images')
+        files = request.files.getlist('images[]')
         for file in files:
             if file:
                 filename = secure_filename(file.filename)
-                
-                # Resize the image to 1080x1080 using PIL
                 image = Image.open(file)
                 image = ImageOps.fit(image, (1080, 1080), Image.Resampling.LANCZOS)
-                
-                # Save the image to a BytesIO object
                 img_byte_arr = io.BytesIO()
                 image.save(img_byte_arr, format='JPEG')
                 img_byte_arr = img_byte_arr.getvalue()
-                
-                # Encode the image to base64
                 encoded_string = base64.b64encode(img_byte_arr).decode('utf-8')
-
                 new_image = PropertyImage(property_id=property.id, image_data=encoded_string)
                 db.session.add(new_image)
-                db.session.commit()
 
+        db.session.commit()
         return redirect(url_for('dashboard'))
 
-    return render_template('/cms/edit.html', property=property)
+    images = PropertyImage.query.filter_by(property_id=property.id).all()
+    return render_template('/cms/edit.html', property=property, images=images)
+
 
 @app.route('/delete_property/<int:property_id>', methods=['POST'])
 def delete_property(property_id):
