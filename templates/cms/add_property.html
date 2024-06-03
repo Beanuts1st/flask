@@ -1,41 +1,90 @@
-<!-- add_property.html -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Property</title>
-</head>
-<body>
-    <h1>Add Property</h1>
-    <form action="{{ url_for('add_property') }}" method="POST" enctype="multipart/form-data">
-        <label for="title">Title:</label>
-        <input type="text" name="title" required><br><br>
+{% extends "/cms/admin.html" %}
 
-        <label for="description">Description:</label>
-        <textarea name="description" required></textarea><br><br>
+{% block content %}
+<div class="container mt-5">
+  <div class="card">
+    <div class="card-header">
+      <h2>
+        Add New Property
+      </h2>
+    </div>
+    <div class="card-body">
+      <div class="d-flex">
+        <div class="flex-grow-1">
+          <form method="POST" enctype="multipart/form-data" onsubmit="return validateForm()">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="title">Title</label>
+                  <input type="text" name="title" class="form-control" size="32" required>
+                </div>
+                <div>
+                    <label for="type">Type:</label>
+                    <select id="type" name="type" required>
+                        <option value="">SELECT</option>
+                        <option value="TANAH">TANAH</option>
+                        <option value="RUMAH">RUMAH</option>
+                        <option value="RUKO">RUKO</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                  <label for="price">Price</label>
+                  <input type="number" name="price" class="form-control" id="price" required>
+                </div>
+                <div class="form-group">
+                  <label for="description">Description</label>
+                  <textarea name="description" class="form-control" rows="5" required></textarea>
+                </div>
+                <div class="form-group">
+                  <label for="location">Location</label>
+                  <input type="text" name="location" class="form-control" size="32" required>
+                </div>
+                <div class="form-group text-center">
+                  <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="image-preview-container card"
+                  style="position: relative; width: 100%; padding-top: 90%; height: 0; margin-top: 31px; background-color: rgba(0, 0, 0, .03);">
+                  <img id="preview" src="#" alt="Image Preview"
+                    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; display: none;">
+                </div>
+                <div class="form-group mt-5">
+                  <input type="file" name="images" class="form-control-file" id="imageInput" multiple><br />
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
-        <label for="price">Price:</label>
-        <input type="number" name="price" required><br><br>
-
-        <label for="location">Location:</label>
-        <input type="text" name="location" required><br><br>
-
-        <label for="type">Type:</label>
-        <select id="type" name="type" required>
-            <option value="">SELECT</option>
-            <option value="TANAH">TANAH</option>
-            <option value="RUMAH">RUMAH</option>
-            <option value="RUKO">RUKO</option>
-        </select><br><br>
-
-        <label for="date_added">Date Added:</label>
-        <input type="datetime-local" name="date_added" required><br><br>
-
-        <label for="images">Images:</label>
-        <input type="file" name="images" multiple required><br><br>
-
-        <input type="submit" value="Add Property">
-    </form>
-</body>
-</html>
+<script>
+  function validateForm() {
+    var price = document.getElementById("price").value;
+    if (isNaN(price) || price <= 0) {
+      alert("Price must be a positive number");
+      return false;
+    }
+    return true;
+  }
+  document.querySelector('input[type="file"]').addEventListener('change', function (e) {
+    var file = this.files[0];
+    if (file) {
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        var preview = document.getElementById('preview');
+        preview.src = e.target.result;
+        preview.style.display = 'block';
+      }
+      reader.readAsDataURL(file);
+    } else {
+      var preview = document.getElementById('preview');
+      preview.src = '#';
+      preview.style.display = 'none';
+    }
+  });
+</script>
+{% endblock %}

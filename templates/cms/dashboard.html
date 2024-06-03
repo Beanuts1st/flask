@@ -33,14 +33,31 @@
                             <td>{{ property.location }}</td>
                             <td>${{ property.price }}</td>
                             <td>
-                                {% if property.images %}
-                                <img src="data:image/jpeg;base64,{{ property.images[0].image_data }}"
-                                    alt="Property Image" class="img-fluid">
-                                {% else %}
-                                <img src="https://via.placeholder.com/300" alt="No Image Available">
-                                {% endif %}
+                                <div id="carouselExampleControls{{ property.id }}" class="carousel slide"
+                                    data-ride="carousel">
+                                    <div class="carousel-inner">
+                                        {% for image in property.images %}
+                                        <div class="carousel-item {% if loop.first %}active{% endif %}">
+                                            <img src="data:image/jpeg;base64,{{ image.image_data }}"
+                                                class="d-block w-100" alt="Property Image">
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                    <a class="carousel-control-prev"
+                                        href="#carouselExampleControls{{ property.id }}" role="button"
+                                        data-slide="prev">
+                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                        <span class="sr-only">Previous</span>
+                                    </a>
+                                    <a class="carousel-control-next"
+                                        href="#carouselExampleControls{{ property.id }}" role="button"
+                                        data-slide="next">
+                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                        <span class="sr-only">Next</span>
+                                    </a>
+                                </div>
                             </td>
-                             <td>
+                            <td>
                                 <a href="{{ url_for('edit_property', property_id=property.id) }}"
                                     class="btn btn-primary btn-sm">Edit</a>
                                 <form method="POST" action="{{ url_for('delete_property', property_id=property.id) }}"
@@ -93,6 +110,4 @@
         </div>
     </div>
 </div>
-
-
 {% endblock %}

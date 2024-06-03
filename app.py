@@ -183,7 +183,7 @@ def add_property():
         price = request.form['price']
         location = request.form['location']
         type = request.form['type']
-        date_added = datetime.strptime(request.form['date_added'], '%Y-%m-%dT%H:%M')
+        date_added = datetime.utcnow()
 
         new_property = Property(
             title=title,
@@ -219,7 +219,7 @@ def add_property():
                 db.session.add(new_image)
                 db.session.commit()
         
-        return redirect(url_for('home'))
+        return redirect(url_for('dashboard'))
     return render_template('/cms/add_property.html')
 
 @app.route('/edit_property/<int:property_id>', methods=['GET', 'POST'])
