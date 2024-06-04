@@ -19,13 +19,13 @@
                   <input type="text" name="title" class="form-control" size="32" required>
                 </div>
                 <div class="form-group">
-                    <label for="type">Type:</label>
-                    <select id="type" name="type" class="form-control" required>
-                        <option value="">SELECT</option>
-                        <option value="TANAH">TANAH</option>
-                        <option value="RUMAH">RUMAH</option>
-                        <option value="RUKO">RUKO</option>
-                    </select>
+                  <label for="type">Type:</label>
+                  <select id="type" name="type" class="form-control" required>
+                    <option value="">SELECT</option>
+                    <option value="TANAH">TANAH</option>
+                    <option value="RUMAH">RUMAH</option>
+                    <option value="RUKO">RUKO</option>
+                  </select>
                 </div>
                 <div class="form-group">
                   <label for="price">Price</label>
@@ -40,18 +40,27 @@
                   <input type="text" name="location" class="form-control" size="32" required>
                 </div>
               </div>
-              <div class="col-md-6">
-                <div class="image-preview-container card"
-                style="position: relative; width: 100%; padding-top: 90%; height: 0; margin-top: 31px; background-color: rgba(0, 0, 0, .03);">
-                <img id="preview" src="#" alt="Image Preview"
-                style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; display: none;">
+              <div class="col-md-5 ml-5">
+                <div class="card h-75 mt-5">
+                  <div class="img-property-slide-wrap">
+                    <div class="img-property-slide new-images-preview" id="new-images-preview">
+                      <!-- New images preview will be added here -->
+                    </div>
+                    <button type="button" class="prev" onclick="prevImage()">&#10094;</button>
+                    <button type="button" class="next" onclick="nextImage()">&#10095;</button>
+                  </div>
+                </div>
               </div>
-              <div class="form-group mt-5">
-                <input type="file" name="images" class="form-control-file" id="imageInput" multiple><br />
+              <div class="col-md-12 d-flex justify-content-center pt-5 b-5">
+                <div class="form-group">
+                  <input type="file" id="images" class="form-control-file" name="images[]" multiple onchange="previewImages()">
+                  <label for="images" class="btn btn-primary">
+                      <i class="fas fa-upload"></i> Upload Images
+                  </label>
               </div>
-              <div class="form-group text-center">
-                <button type="submit" class="btn btn-primary">Submit</button>
-              </div>
+                <div class="form-group text-center">
+                  <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
               </div>
             </div>
           </form>
@@ -60,8 +69,79 @@
     </div>
   </div>
 </div>
+<style>
+  .form-control-file {
+      display: none;
+  }
+
+  .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.5em 1em;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 0.25em;
+      cursor: pointer;
+      margin-left: 1em;
+  }
+
+  .btn-primary i {
+      margin-right: 0.5em;
+  }
+
+  .btn-primary:hover {
+      background-color: #0056b3;
+  }
+
+  .img-property-slide-wrap {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+  }
+
+  .img-property-slide {
+      display: flex;
+      transition: transform 0.5s ease-in-out;
+  }
+
+  .img-property-slide img {
+      max-width: 100%;
+      max-height: 100%;
+      margin: 0 auto;
+  }
+
+  .property-img {
+      width: 100%;
+      height: 300px; /* Fixed height for property images */
+      object-fit: cover;
+  }
+
+  .prev,
+  .next {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: rgba(0, 0, 0, 0.5);
+      color: white;
+      border: none;
+      padding: 0.5em;
+      cursor: pointer;
+      z-index: 1;
+  }
+
+  .prev {
+      left: 0;
+  }
+
+  .next {
+      right: 0;
+  }
+</style>
 
 <script>
+  let currentIndex = 0;
+  
   function validateForm() {
     var price = document.getElementById("price").value;
     if (isNaN(price) || price <= 0) {
@@ -70,21 +150,50 @@
     }
     return true;
   }
-  document.querySelector('input[type="file"]').addEventListener('change', function (e) {
-    var file = this.files[0];
-    if (file) {
-      var reader = new FileReader();
-      reader.onload = function (e) {
-        var preview = document.getElementById('preview');
-        preview.src = e.target.result;
-        preview.style.display = 'block';
+  
+  function previewImages() {
+      const previewContainer = document.getElementById('new-images-preview');
+      const files = document.getElementById('images').files;
+      previewContainer.innerHTML = '';
+      Array.from(files).forEach((file, index) => {
+          const reader = new FileReader();
+          reader.onload = e => {
+              const img = document.createElement('img');
+              img.src = e.target.result;
+              img.classList.add('img-fluid', 'property-img');
+              previewContainer.appendChild(img);
+          };
+          reader.readAsDataURL(file);
+      });
+      currentIndex = 0;
+      showImage(currentIndex);
+  }
+
+  function showImage(index) {
+      const previewContainer = document.getElementById('new-images-preview');
+      const images = previewContainer.getElementsByTagName('img');
+      const totalImages = images.length;
+      if (totalImages === 0) {
+          return;
       }
-      reader.readAsDataURL(file);
-    } else {
-      var preview = document.getElementById('preview');
-      preview.src = '#';
-      preview.style.display = 'none';
-    }
-  });
+      if (index >= totalImages) {
+          currentIndex = 0;
+      } else if (index < 0) {
+          currentIndex = totalImages - 1;
+      } else {
+          currentIndex = index;
+      }
+      const offset = -currentIndex * 100 / totalImages;
+      previewContainer.style.transform = `translateX(${offset}%)`;
+  }
+
+  function nextImage() {
+      showImage(currentIndex + 1);
+  }
+
+  function prevImage() {
+      showImage(currentIndex - 1);
+  }
 </script>
+
 {% endblock %}

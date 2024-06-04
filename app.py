@@ -202,7 +202,6 @@ def add_property():
         location = request.form['location']
         type = request.form['type']
         date_added = datetime.utcnow()
-        
 
         new_property = Property(
             title=title,
@@ -217,7 +216,7 @@ def add_property():
         db.session.commit()
 
         # Handling image uploads
-        files = request.files.getlist('images')
+        files = request.files.getlist('images[]')
         for file in files:
             if file:
                 filename = secure_filename(file.filename)
@@ -265,6 +264,9 @@ def edit_property(property_id):
             if file:
                 filename = secure_filename(file.filename)
                 image = Image.open(file)
+                # Convert image to RGB if it is in RGBA mode
+                if image.mode == 'RGBA':
+                    image = image.convert('RGB')
                 image = ImageOps.fit(image, (1080, 1080), Image.Resampling.LANCZOS)
                 img_byte_arr = io.BytesIO()
                 image.save(img_byte_arr, format='JPEG')
@@ -272,12 +274,11 @@ def edit_property(property_id):
                 encoded_string = base64.b64encode(img_byte_arr).decode('utf-8')
                 new_image = PropertyImage(property_id=property.id, image_data=encoded_string)
                 db.session.add(new_image)
-
         db.session.commit()
         return redirect(url_for('dashboard'))
 
     images = PropertyImage.query.filter_by(property_id=property.id).all()
-    return render_template('/cms/edit.html', property=property, images=images)
+    return render_template('/cms/edit_property.html', property=property, images=images)
 
 
 @app.route('/delete_property/<int:property_id>', methods=['POST'])
